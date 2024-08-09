@@ -1,52 +1,29 @@
 import "./App.css";
 import "./theme.css";
-import { useReducer } from "react";
+import { } from "react";
 import { Link } from "react-router-dom";
-
-
-const initialData = {
-  name:"Zahid Abdelkayoum",
-  age : 28,
-  startCount: 0,
-  theme : ""
-}
-
-const reducer =(state,action)=>{
-  switch (action.type){
-    case "CHANGE_NAME":
-      return {...state , name:action.newValue};
-    case "CHANGE_AGE":
-      return {...state ,age:action.newValue};
-    case "COUNT":
-      return {...state , startCount: action.newValue};
-    case "CHANGE_THEME":
-      return {...state, theme:action.newValue};
-    
+import {useContext } from "react";
+import Datacontext from "./context/DataContext";
 
 
 
-      default:
-        return state;
-
-
-
-  }
-};
 
 function App(){
-  const [allData,dispatch]=useReducer(reducer,initialData);
+  const {name,changeName,age,changeAge,startCount,changeCount,theme,changeTheme,} = useContext(Datacontext);
+
+  
   return(
-    <div className={`App ${allData.theme}`}>
+    <div className={`App ${theme}`}>
       <Link to="./page2"> go to page 2</Link>
       <br />
       <br />
       <br />
-      <div  className="btn-container" style={{marginBottom: "44px" }}>
+      <div onChange={() => {
+          changeTheme(theme == "" ? "dark" : "");
+        }} className="btn-container" style={{marginBottom: "44px" }}>
         <i className="fa fa-sun-o" aria-hidden="true" />
         <label className="switch btn-color-mode-switch">
-          <input onChange={() => {
-            dispatch({type:"CHANGE_THEME", newValue:(allData.theme == "")? "dark" : ""})
-          }} type="checkbox" name="color_mode" id="color_mode" defaultValue={1} />
+          <input type="checkbox" name="color_mode" id="color_mode" defaultValue={1} />
           <label
             htmlFor="color_mode"
             data-on="Dark"
@@ -58,34 +35,35 @@ function App(){
         
       </div>
       <button onClick={() => {
-        dispatch({type:"CHANGE_THEME" , newValue:(allData.theme == "")? "dark" : ""})
-      }} style={{marginBottom:"44px"}}>Toggle Theme</button>
+          changeTheme(theme == "" ? "dark" : "");
+        }} style={{marginBottom:"44px"}}>Toggle Theme</button>
       <div>
         <button onClick={() => {
-          dispatch({type:"CHANGE_THEME" , newValue:""})
+          changeTheme("")
         }} style={{marginRight:"26px"}}>light</button>
         <button onClick={() => {
-          dispatch({type:"CHANGE_THEME", newValue:"dark"})
+          changeTheme("dark")
         }} style={{marginRight:"26px"}}>Dark</button>
         <button onClick={() => {
-          dispatch({type:"CHANGE_THEME", newValue:"gray"})
+          changeTheme("gray")
         }} style={{marginRight:"26px"}}>Gray</button>
         <button onClick={() => {
-          dispatch({type:"CHANGE_THEME", newValue:"pink"})
+          changeTheme("pink")
         }}>Pink</button>
       </div>
-      <h2>My name is {allData.name}</h2>
+      <h2>My name is {name} </h2>
       <button onClick={() => {
-        dispatch({type:"CHANGE_NAME",newValue:(allData.name == "Zahid Abdelkayoum")?"The Best":"Zahid Abdelkayoum"})
-      }}>Change Name</button>
-      <h2>My Age Is {allData.age}</h2>
+        changeName();
+      }} >Change Name</button>
+      <h2>My Age Is {age}</h2>
       <button onClick={() => {
-        dispatch({type:"CHANGE_AGE",newValue:33})
-      }}>Change Age</button>
+        changeAge();
+      }} >Change Age</button>
       <h2>The Counter</h2>
       <button onClick={() => {
-        dispatch({type:"COUNT" , newValue:allData.startCount+1})
-      }}>The Count is {allData.startCount}</button>
+        changeCount()
+      }}>The Count is {startCount}</button>
+    
     </div>
   )
 }
