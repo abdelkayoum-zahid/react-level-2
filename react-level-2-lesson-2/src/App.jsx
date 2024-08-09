@@ -1,21 +1,47 @@
-import "./theme.css";
 import "./App.css";
-import { useState } from "react";
+import "./theme.css";
+import { useReducer } from "react";
 
-function App() {
-  const [person , setPerson] = useState("zahid abdelkayoum");
-  const [age , setAge] = useState(28);
-  const [counter , setCounter] = useState(0);
-  const[theme, setTheme]= useState("")
-  const changeCounter = () => {
-    setCounter(counter+1);
+
+const initialData = {
+  name:"Zahid Abdelkayoum",
+  age : 28,
+  startCount: 0,
+  theme : ""
+}
+
+const reducer =(state,action)=>{
+  switch (action.type){
+    case "CHANGE_NAME":
+      return {...state , name:action.newValue};
+    case "CHANGE_AGE":
+      return {...state ,age:action.newValue};
+    case "COUNT":
+      return {...state , startCount: action.newValue};
+    case "CHANGE_THEME":
+      return {...state, theme:action.newValue};
+    
+
+
+
+      default:
+        return state;
+
+
+
   }
-  return (
-    <div className={`App ${theme}`}>
-      <div onChange={()=>{setTheme(theme == "" ? "dark" : "")}} className="btn-container" style={{marginBottom: "44px" }}>
+};
+
+function App(){
+  const [allData,dispatch]=useReducer(reducer,initialData);
+  return(
+    <div className={`App ${allData.theme}`}>
+      <div  className="btn-container" style={{marginBottom: "44px" }}>
         <i className="fa fa-sun-o" aria-hidden="true" />
         <label className="switch btn-color-mode-switch">
-          <input type="checkbox" name="color_mode" id="color_mode" defaultValue={1} />
+          <input onChange={() => {
+            dispatch({type:"CHANGE_THEME", newValue:(allData.theme == "")? "dark" : ""})
+          }} type="checkbox" name="color_mode" id="color_mode" defaultValue={1} />
           <label
             htmlFor="color_mode"
             data-on="Dark"
@@ -26,25 +52,37 @@ function App() {
         <i className="fa fa-moon-o" aria-hidden="true" />
         
       </div>
-        <button onClick={()=>{setTheme(theme == "" ? "dark" : "")}} style={{marginBottom: "44px" }}>Toggle Theme</button>
+      <button onClick={() => {
+        dispatch({type:"CHANGE_THEME" , newValue:(allData.theme == "")? "dark" : ""})
+      }} style={{marginBottom:"44px"}}>Toggle Theme</button>
       <div>
-        <button onClick={() => {setTheme("")}} style={{marginRight: "26px" }}>Light</button>
-        <button onClick={() => {setTheme("dark")}} style={{marginRight: "26px" }}>Dark</button>
-        <button onClick={() => {setTheme("gray")}} style={{marginRight: "26px" }}>Gray</button>
-        <button onClick={() => {setTheme("pink")}}>Pink</button>
+        <button onClick={() => {
+          dispatch({type:"CHANGE_THEME" , newValue:""})
+        }} style={{marginRight:"26px"}}>light</button>
+        <button onClick={() => {
+          dispatch({type:"CHANGE_THEME", newValue:"dark"})
+        }} style={{marginRight:"26px"}}>Dark</button>
+        <button onClick={() => {
+          dispatch({type:"CHANGE_THEME", newValue:"gray"})
+        }} style={{marginRight:"26px"}}>Gray</button>
+        <button onClick={() => {
+          dispatch({type:"CHANGE_THEME", newValue:"pink"})
+        }}>Pink</button>
       </div>
-      <h2 style={{marginTop: "66px" }}>My name is {person}</h2>
-      <button
-      onClick={() => {setPerson("The best")}}
-      >change name</button>
-      <h2>My age is {age}</h2>
-      <button onClick={()=> {setAge(33)}}>change age</button>
-      <h2>the counter</h2>
-      <button onClick={changeCounter}>count is {counter}</button>
-
-
+      <h2>My name is {allData.name}</h2>
+      <button onClick={() => {
+        dispatch({type:"CHANGE_NAME",newValue:(allData.name == "Zahid Abdelkayoum")?"The Best":"Zahid Abdelkayoum"})
+      }}>Change Name</button>
+      <h2>My Age Is {allData.age}</h2>
+      <button onClick={() => {
+        dispatch({type:"CHANGE_AGE",newValue:33})
+      }}>Change Age</button>
+      <h2>The Counter</h2>
+      <button onClick={() => {
+        dispatch({type:"COUNT" , newValue:allData.startCount+1})
+      }}>The Count is {allData.startCount}</button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
