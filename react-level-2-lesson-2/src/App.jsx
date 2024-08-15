@@ -1,6 +1,6 @@
 import "./App.css";
 import "./theme.css";
-import { } from "react";
+import { useEffect,useState} from "react";
 import { Link } from "react-router-dom";
 import {useContext } from "react";
 import Datacontext from "./context/DataContext";
@@ -9,17 +9,25 @@ import Datacontext from "./context/DataContext";
 
 
 function App(){
-  const {name,changeName,age,changeAge,startCount,changeCount,theme,changeTheme,} = useContext(Datacontext);
-
+  const {name,changeName,age,changeAge,startCount,changeCount,theme,changeTheme,toggleTheme} = useContext(Datacontext);
+  const [myName,setMyName]=useState("Zahid Abdelkayoum");
+  useEffect(() => {
+    console.log("hiiiiiiiii");
+  },[myName])
   
   return(
     <div className={`App ${theme}`}>
+      <h1>My Name Is {myName}</h1>
+      <button onClick={() => {
+        setMyName("The Best")
+      }}>change The NAME</button>
+
       <Link to="./page2"> go to page 2</Link>
       <br />
       <br />
       <br />
       <div onChange={() => {
-          changeTheme(theme == "" ? "dark" : "");
+          toggleTheme();
         }} className="btn-container" style={{marginBottom: "44px" }}>
         <i className="fa fa-sun-o" aria-hidden="true" />
         <label className="switch btn-color-mode-switch">

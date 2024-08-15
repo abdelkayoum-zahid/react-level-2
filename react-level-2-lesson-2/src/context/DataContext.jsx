@@ -35,11 +35,11 @@ export function DataProvider({children}) {
   const changeCount = () => {
     dispatch({type:"COUNT",newValue:firstState.startCount+1})
   }
-  const changeTheme = (valeur) => {
+  const changeTheme = (valeur) => { 
     dispatch({type:"CHANGE_THEME" , newValue:valeur})
   }
   const toggleTheme = () => {
-    dispatch({type:"CHANGE_THEME" , newValue: initialData.theme == "" ? "dark" : ""})
+    dispatch({type:"CHANGE_THEME" , newValue: firstState.theme == "" ? "dark" : ""})
   }
 
   return (
